@@ -3,9 +3,14 @@
     "description": "Laravel 5.1 package for full-text search over Eloquent models based on Solarium",
     "type": "library",
     "require": {
-        "solarium/solarium": "3.2.*",
-        "illuminate/support": "5.1.*",
-        "php": ">=5.5.9"
+        "php": ">=5.5.9",
+        "solarium/solarium": "3.*",
+        "illuminate/support": "5.1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.6.*",
+        "mockery/mockery": "0.9.*",
+        "orchestra/testbench": "3.1.*"
     },
     "license": "GPL v2",
     "authors": [
@@ -16,7 +21,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Irto\\Solrio\\": "src/"
+            "Irto\\Solrio\\": "src/",
+            "tests\\": "tests/"
         }
     },
     "minimum-stability": "dev"
