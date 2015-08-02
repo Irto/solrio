@@ -1,0 +1,23 @@
+{
+    "name": "irto/solrio",
+    "description": "Laravel 5.1 package for full-text search over Eloquent models based on Solarium",
+    "type": "library",
+    "require": {
+        "solarium/solarium": "3.2.*",
+        "illuminate/support": "5.1.*",
+        "php": ">=5.5.9"
+    },
+    "license": "GPL v2",
+    "authors": [
+        {
+            "name": "Israel Trindade",
+            "email": "irto@outlook.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Irto\\Solrio\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
