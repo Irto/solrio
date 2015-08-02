@@ -50,6 +50,16 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
         
         $this->app->singleton('search', 'Irto\Solrio\Search');
+
+        $this->app->singleton('command.search.rebuild', function () {
+            return new Console\RebuildCommand;
+        });
+
+        $this->app->singleton('command.search.clear', function () {
+            return new Console\ClearCommand;
+        });
+
+        $this->commands(['command.search.rebuild', 'command.search.clear']);
     }
 
     /**
@@ -61,6 +71,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         return [
             'search',
+            'command.search.clear',
+            'command.search.rebuild',
             'Solarium\Client',
             'Solarium\QueryType\Update\Query\Query',
         ];
