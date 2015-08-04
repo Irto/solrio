@@ -3,6 +3,7 @@
 use App;
 use Config;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -34,7 +35,6 @@ class RebuildCommand extends Command
         $modelRepositories = array_keys($this->search->config('.index.models'));
 
         if (count($modelRepositories) > 0) {
-
             $this->rebuildRepositories($modelRepositories);
 
             $this->info(PHP_EOL . 'Operation is fully complete!');
@@ -44,7 +44,7 @@ class RebuildCommand extends Command
     }
 
     /**
-     * Rebuilde a lista of repositories
+     * Rebuild a list of repositories
      * 
      * @param array $modelRepositories
      * 
@@ -55,43 +55,54 @@ class RebuildCommand extends Command
         foreach ($modelRepositories as $modelRepository) {
             $this->info('Creating index for model: "' . $modelRepository . '"');
 
-            $modelRepository = new $modelRepository;
-            $models = $modelRepository->all()->all();
-            $count = count($models);
-
-            if ($count > 0) {
-                $this->rebuildModels($models);
-            } else {
-                $this->comment(' No available models found. ');
-            }
+            $this->rebuildRepository(new $modelRepository);
         }
 
-        App::make('Solarium\Client')->update(
-            App::make('Solarium\QueryType\Update\Query\Query')
-        );
+        $updateQuery = App::make('Solarium\QueryType\Update\Query\Query');
+        $updateQuery->addCommit();
+
+        App::make('Solarium\Client')->update($updateQuery);
+    }
+
+    /**
+     * Rebuild a specific repository
+     * 
+     * @param \Illuminate\Database\Eloquent\Model $modelRepository
+     * 
+     * @return void
+     */
+    public function rebuildRepository(Model $modelRepository)
+    {
+        $count = $modelRepository->count();
+
+        if ($count < 1) {
+            return $this->comment(' No available models found.');
+        }
+
+        $progress = new ProgressBar($this->getOutput(), ++$count);
+
+        $modelRepository->chunk(200, function ($models) use ($progress) {
+            $this->rebuildModels($models->all(), $progress);
+        });
+
+        $progress->finish();
     }
 
     /**
      * Rebuild a list of models
      * 
      * @param array $models
+     * @param ProgressBar $progress
      * 
      * @return void
      */
-    public function rebuildModels(array $models)
+    public function rebuildModels(array $models, ProgressBar $progress)
     {
         $count = count($models);
-
-        /** @var ProgressBar $progress */
-        $progress = new ProgressBar($this->getOutput(), ++$count);
 
         foreach ($models as $model) {
             $this->search->update($model);
             $progress->advance();
         }
-
-        App::make('Solarium\QueryType\Update\Query\Query')->addCommit();
-
-        $progress->finish();
     }
 }
