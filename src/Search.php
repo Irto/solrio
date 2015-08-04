@@ -6,6 +6,8 @@ use Solarium;
 use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 use Illuminate\Database\Eloquent\Model;
 
+use Irto\Solrio\Model\Searchable;
+
 /**
  * Class Search
  *
@@ -75,9 +77,24 @@ class Search
         return App::make('Irto\Solrio\Query\Builder', compact('query'));
     }
 
+    /**
+     * Verify if model data can be indexed
+     * 
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * 
+     * @return bool
+     */
+    public function isSearchable(Model $model)
+    {
+        if ($model instanceof Searchable) {
+            return $model->isSearchable();
+        }
+
+        return true;
+    }
 
     /**
-     * Update document in index for model
+     * Update document in index for model (if it's {@link Searchable})
      *
      * @param \Illuminate\Database\Eloquent\Model $model
      * 
@@ -85,6 +102,10 @@ class Search
      */
     public function update(Model $model)
     {
+        if (!$this->isSearchable($model)) {
+            return $this;
+        }
+
         if ($model->exists) {
             $this->delete($model);
         }

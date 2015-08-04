@@ -96,11 +96,17 @@ For register of necessary events (save/update/delete) use Irto\Solrio\Model\Sear
     use Irto\Solrio\Model\Searchable;
     use Irto\Solrio\Model\SearchTrait;
 
-    class Dummy extends Model
+    class Dummy extends Model implements Searchable // use of Searchable is optional, without this will be always available to search
     {
         use SearchTrait;
 
-        // ...
+        /**
+         * Is the model available for searching?
+         */
+        public function isSearchable()
+        {
+            return $this->publish;
+        }
     }
 ```
 
