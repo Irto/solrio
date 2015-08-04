@@ -31,7 +31,7 @@ If you want to use the facade to search, add this to your facades in app/config/
     ],
 ```
 
-#Configuration
+##Configuration
 
 Publish the config file into your project by running:
 
@@ -66,11 +66,11 @@ In published config file add descriptions for models which need to be indexed, f
     ],
 ```
 
-#Usage
+##Usage
 
-##Artisan commands
+###Artisan commands
 
-###Build/Rebuild search index
+####Build/Rebuild search index
 
 For building of search index run:
 
@@ -78,7 +78,7 @@ For building of search index run:
     php artisan search:rebuild
 ```
 
-###Clear search index
+####Clear search index
 
 For clearing of search index run:
 
@@ -86,7 +86,7 @@ For clearing of search index run:
     php artisan search:clear
 ```
 
-##Partial updating of search index
+###Partial updating of search index
 
 For register of necessary events (save/update/delete) use Irto\Solrio\Model\SearchTrait in target model:
 
