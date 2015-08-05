@@ -49,4 +49,13 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals(3, $result);
     }
+
+    public function testSimpleWhere()
+    {
+        $builder = App::make('Irto\Solrio\Query\Builder');
+
+        $result = $builder->where('*', 'big analog', ['phrase' => true, 'proximity' => 5])->count();
+
+        $this->assertEquals(2, $result);
+    }
 }
