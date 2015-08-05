@@ -1,6 +1,8 @@
-# Under Development
-
 # solrio
+[![Latest Stable Version](https://poser.pugx.org/irto/solrio/v/stable)](https://packagist.org/packages/irto/solrio)
+[![Latest Unstable Version](https://poser.pugx.org/irto/solrio/v/unstable)](https://packagist.org/packages/irto/solrio)
+[![License](https://poser.pugx.org/irto/solrio/license)](https://packagist.org/packages/irto/solrio)
+
 Laravel 5.1 package for full-text search over Eloquent models based on Solarium, inspired by [Laravel Lucene Search](https://github.com/nqxcode/laravel-lucene-search)
 
 ## Installation

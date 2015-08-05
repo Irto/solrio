@@ -12,7 +12,7 @@
         "mockery/mockery": "0.9.*",
         "orchestra/testbench": "3.1.*"
     },
-    "license": "GPL v2",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Israel Trindade",
