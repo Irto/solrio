@@ -7,10 +7,6 @@ class SearchTest extends BaseTestCase
 {
     protected function configure()
     {
-        // Test search without analyser filters and stopwords.
-        Config::set('laravel-lucene-search.analyzer.filters', []);
-        Config::set('laravel-lucene-search.analyzer.stopwords', []);
-
         parent::configure();
     }
 

@@ -118,7 +118,7 @@ You can also do it manually, how on a queued listener:
     use Illuminate\Queue\InteractsWithQueue;
     use Illuminate\Contracts\Queue\ShouldQueue;
 
-    use Search; // if you configured the alias
+    use Search; // if alias is configured
 
     class DummyUpdatedListener extends ShouldQueue
     {
@@ -128,7 +128,7 @@ You can also do it manually, how on a queued listener:
         {
             $model = $event->getModel();
 
-            Search::update($model); // instead you can use 'App::offsetGet('search')->update($model);'
+            Search::update($model); // you can use 'App::offsetGet('search')->update($model);' instead
         }
     }
 ```
