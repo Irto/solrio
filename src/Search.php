@@ -60,7 +60,7 @@ class Search
         $fields[] = $model->getKeyName();
 
         return array_only(
-            $model->getAttributes(), 
+            $model->attributesToArray(), 
             $fields
         );
     }
