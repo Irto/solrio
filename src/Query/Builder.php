@@ -1,5 +1,6 @@
 <?php namespace Irto\Solrio\Query;
 
+use Closure;
 use Solarium;
 use Illuminate\Support\Collection;
 use Solarium\Core\Query\Result\ResultInterface;
@@ -118,7 +119,7 @@ class Builder
      * Add a clause to be matched on query
      * 
      * @param string $field to be searched
-     * @param string $value to be matched
+     * @param string $value|closure to be matched
      * @param array $options you can se defaults at {@link Irto\Solrio\Query\Builder::setDefaultOptions()}
      * @param string $operator ['AND']
      * 
@@ -158,45 +159,23 @@ class Builder
     /**
      * Process a string value to be searched with $options
      * 
-     * @param string $value
+     * @param string|closure $value
      * @param array $options
      * 
      * @return string
      */
     protected function processValue($value, array $options)
     {
-        $string = $this->query->getHelper()->escapePhrase($value);
+        if ($value instanceof Closure) {
+            $whereGroup = new WhereGroup();
+            $value($whereGroup);
 
-        if ($options['fuzzy'] === true) {
-            $string = "{$string}~";
-        } else if ($options['fuzzy'] > 0) {
-            $p = $options['fuzzy'];
-            $string = "{$string}~{$p}";
+            return $whereGroup->getValue();
         }
 
-        if ($options['phrase']) {
-            $string = "\"{$string}\"";
-        }
+        $terms = new SearchableString($value);
 
-        if ($options['required']) {
-            $string = "+{$string}";
-        }
-
-        if ($options['prohibited']) {
-            $string = "-{$string}";
-        }
-
-        if ($options['proximity'] > 0) {
-            $p = $options['proximity'];
-            $string = "{$string}~{$p}";
-        }
-
-        if ($options['boost'] > 0) {
-            $b = $options['boost'];
-            $string = "{$string}^{$b}";
-        }
-
-        return $string;
+        return $terms->processOptions($options)->getValue();
     }
 
     /**
@@ -215,6 +194,7 @@ class Builder
      * </pre>
      * 
      * Get look in: {@link http://lucene.apache.org/core/3_6_0/queryparsersyntax.html#Proximity%20Searches}
+     * And implementation here: {@link Irto\Solrio\Query\Term}
      * 
      * @param array $options [array()]
      * 
