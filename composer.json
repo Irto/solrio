@@ -21,7 +21,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "Irto\\Solrio\\": "src/",
+            "Irto\\Solrio\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "tests\\": "tests/"
         }
     },
